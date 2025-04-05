@@ -1,0 +1,63 @@
+/* Hero Section */
+.hero {
+  /* Background com gradiente sobreposto à imagem */
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+              url('../../img/hero-bg.jpg') center/cover no-repeat;
+  /* Ajustes de tamanho e posicionamento */
+  margin: 0;
+  width: 100%;
+  /* Definir altura para ocupar toda a viewport visível abaixo do header */
+  height: 100vh;
+  padding-top: 60px; /* Altura do header - reduzido de 80px para 60px */
+  position: relative;
+  display: flex;
+  align-items: center; /* Centraliza conteúdo verticalmente */
+  justify-content: center;
+  /* box-sizing é crucial para padding incluir na altura */
+  box-sizing: border-box;
+  overflow: hidden; /* Evita barras de rolagem se a imagem for maior */
+}
+
+.hero-content {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px; /* Padding interno do conteúdo */
+  text-align: center;
+  /* Altura e padding removidos daqui */
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  color: #fff;
+  line-height: 1.2;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+  margin-bottom: 2rem;
+}
+
+.hero h1 span {
+  font-size: 1.8rem;
+  display: block;
+  margin-top: 1.5rem;
+  font-weight: 400;
+}
+
+.scroll-down {
+  position: absolute;
+  bottom: 20px; /* Ajustado para ficar mais acima */
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 2.5rem;
+  animation: bounce 2s infinite;
+  cursor: pointer;
+  background: none;
+  border: none;
+  z-index: 10;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+  40% { transform: translateX(-50%) translateY(-20px); }
+  60% { transform: translateX(-50%) translateY(-10px); }
+}

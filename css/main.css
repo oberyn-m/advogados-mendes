@@ -1,0 +1,22 @@
+@import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+
+@import 'base/reset.css';
+@import 'base/typography.css';
+@import 'base/variables.css';
+
+@import 'components/buttons.css';
+@import 'components/cards.css';
+@import 'components/forms.css';
+@import 'components/modal.css';
+
+@import 'sections/about.css';
+@import 'sections/articles.css';
+@import 'sections/contact.css';
+@import 'sections/faq.css';
+@import 'sections/footer.css';
+@import 'sections/hero.css';
+@import 'sections/navbar.css';
+@import 'sections/services.css';
+
+@import 'utils/animations.css';
+@import 'utils/responsive.css';

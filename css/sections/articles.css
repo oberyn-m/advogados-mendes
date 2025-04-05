@@ -1,0 +1,403 @@
+/* Estilos para a seção de Artigos - Visual de Galeria */
+.articles {
+  background-color: var(--background-light);
+  padding: 60px 0; /* Reduzido de 80px para 60px */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  position: relative; /* Para posicionamento absoluto das setas */
+}
+
+.articles .section-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.articles .section-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  color: #1c0b2b;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.articles .section-header p {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.articles .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+/* Estilo de galeria para a grid de artigos */
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Exatamente 3 colunas */
+  gap: 25px; /* Espaçamento maior entre os cards */
+  margin: 40px auto 20px;
+  width: 100%;
+  transition: all 0.5s ease;
+  margin-bottom: 40px;
+}
+
+.article-card {
+  border-radius: 12px; /* Bordas mais arredondadas */
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+  transition: all 0.4s ease;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.article-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.article-image {
+  height: 200px; /* Altura padronizada */
+  overflow: hidden;
+  position: relative;
+}
+
+.article-image::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+  pointer-events: none;
+}
+
+.article-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.article-card:hover .article-image img {
+  transform: scale(1.07);
+}
+
+.article-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+}
+
+.article-content h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #1c0b2b;
+  font-weight: 600;
+  margin-bottom: 8px;
+  line-height: 1.3;
+  transition: color 0.3s ease;
+}
+
+.article-card:hover .article-content h3 {
+  color: #4a6da7;
+}
+
+.article-date {
+  color: #666;
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.article-description p {
+  color: #666;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* Estilos para os modais de artigos */
+.article-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  display: none;
+  overflow-y: auto;
+}
+
+.article-modal-content {
+  background: white;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  padding: 30px;
+  margin: 50px auto;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  height: auto;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.article-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.article-modal-close:hover {
+  color: #666;
+  transform: rotate(90deg);
+}
+
+.modal-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.article-modal-image {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 300px;
+}
+
+.article-modal-text {
+  flex: 1;
+}
+
+.article-modal-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.article-modal-text h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #1c0b2b;
+  font-family: 'Playfair Display', serif;
+}
+
+.article-modal-text .article-date {
+  margin-bottom: 20px;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.article-modal-body {
+  line-height: 1.8;
+  color: #444;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Estilos para paginação tipo galeria */
+.gallery-pagination {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1300px; /* Limita a largura para não ficar muito afastado */
+  padding: 0 15px;
+  margin: 0 auto;
+  pointer-events: none; /* Evita problemas de clique */
+  z-index: 50; /* Aumentado para garantir que fique acima de outros elementos */
+  transform: translateY(-50%);
+}
+
+/* Posiciona os botões lateralmente */
+.prev-arrow {
+  position: absolute;
+  left: 30px;
+}
+
+.next-arrow {
+  position: absolute;
+  right: 30px;
+}
+
+.pagination-arrow {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgba(28, 11, 43, 0.2);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  margin: 0;
+  pointer-events: auto; /* Permite cliques nos botões */
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.pagination-arrow:hover {
+  background-color: rgba(28, 11, 43, 0.4);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.pagination-arrow:active {
+  transform: scale(0.95);
+}
+
+.pagination-arrow.disabled {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Adiciona um efeito de pulsar suave para os botões, similar ao bounce do hero */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.pagination-arrow:not(.disabled) {
+  animation: pulse 3s infinite ease-in-out;
+}
+
+.pagination-indicator {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 15px;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+}
+
+.pagination-indicator-container {
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 40px; /* Espaço abaixo do indicador */
+}
+
+.current-page {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #4a6da7;
+}
+
+.page-separator {
+  margin: 0 5px;
+  color: #999;
+}
+
+.total-pages {
+  color: #777;
+}
+
+/* Animações para transição de página */
+.articles-grid {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilos responsivos para a grade de artigos */
+@media (max-width: 992px) {
+  .articles-grid {
+    grid-template-columns: repeat(3, 1fr); /* Mantém 3 artigos */
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .articles-grid {
+    grid-template-columns: repeat(2, 1fr); /* Reduz para 2 artigos */
+    gap: 15px;
+  }
+  
+  .article-image {
+    height: 180px;
+  }
+  
+  .pagination-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .prev-arrow {
+    left: 10px;
+  }
+  
+  .next-arrow {
+    right: 10px;
+  }
+  
+  .pagination-indicator-container {
+    margin-top: 15px;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 576px) {
+  .articles-grid {
+    grid-template-columns: 1fr; /* Mostra 1 artigo por linha */
+    gap: 20px;
+  }
+  
+  .article-image {
+    height: 200px;
+  }
+  
+  .pagination-arrow {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+  
+  .prev-arrow {
+    left: 5px;
+  }
+  
+  .next-arrow {
+    right: 5px;
+  }
+}

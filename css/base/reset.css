@@ -1,0 +1,83 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 60px; /* Altura do header */
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Garantir que o main ocupe toda a altura necessária */
+main {
+  padding-top: 60px; /* Valor igual à altura do header */
+  width: 100%;
+  position: relative;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button, input, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Regras para seções */
+section {
+  width: 100%;
+  position: relative;
+  height: 100vh; /* Seções com altura total da viewport */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px 0;
+}
+
+/* Primeira seção (hero) ajustada para ficar logo abaixo do header */
+section#inicio {
+  height: calc(100vh - 60px);
+  margin-top: 0;
+}
+
+/* Regras para classes que usam .section */
+.section {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px 0;
+  min-height: 100vh;
+}

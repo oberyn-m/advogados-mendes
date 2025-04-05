@@ -1,0 +1,79 @@
+.about {
+  background-color: var(--background-light);
+  padding: 80px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Centraliza o título */
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+  width: 100%;
+}
+
+.section-header h2 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 15px;
+  font-family: 'Playfair Display', serif;
+  text-align: center;
+}
+
+.section-header p {
+  font-size: 1.1rem;
+  color: #666;
+  text-align: center;
+}
+
+/* Organiza o conteúdo em duas colunas */
+.about-content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+/* Texto à esquerda */
+.about-text {
+  flex: 1;
+  text-align: left;
+  max-width: 50%;
+}
+
+.about-text p {
+  margin-bottom: 20px;
+  line-height: 1.8;
+  color: #444;
+  text-align: left;
+  font-size: 1.1rem; /* Increased text size */
+}
+
+/* Imagem à direita */
+.about-image {
+  flex: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  max-width: 50%;
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+  object-fit: cover;
+}
+
+.about-image:hover img {
+  transform: scale(1.03);
+}
+
+/* Add more content if needed to fill space */
+.about-text .additional-content {
+  margin-top: 30px;
+}
