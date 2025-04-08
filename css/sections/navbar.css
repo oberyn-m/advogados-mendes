@@ -1,4 +1,3 @@
-/* Estilo para o header e menu de navegação */
 .header {
   background-color: #1c0b2b;
   position: fixed;
@@ -62,12 +61,10 @@
   line-height: 1;
 }
 
-/* Efeito hover */
 .menu-link:hover {
   color: #6f95ff;
 }
 
-/* Toggle (Hamburger) - Oculto na versão desktop */
 .menu-toggle {
   display: none;
   background: transparent;
@@ -106,7 +103,6 @@
   bottom: -8px;
 }
 
-/* Menu mobile - Sempre oculto agora */
 .main-menu-wrapper {
   position: static;
   display: block;

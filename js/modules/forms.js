@@ -1,9 +1,7 @@
 const Forms = {
   init: function() {
     this.setupContactForm();
-    // Removido this.setupPhoneMask() pois não está definido
     
-    // Adicionar máscara do telefone
     const telefoneInput = document.getElementById('telefone');
     if (telefoneInput) {
       telefoneInput.addEventListener('input', function(e) {
@@ -47,16 +45,13 @@ const Forms = {
           const data = await response.json();
           
           if (data.success === true) {
-            // Reset do formulário
             contactForm.reset();
             
-            // Forçar atualização das máscaras
             const telefoneInput = document.getElementById('telefone');
             if(telefoneInput && telefoneInput.trigger) {
                 telefoneInput.trigger('input');
             }
             
-            // Exibir mensagem de sucesso
             formSuccess.style.display = 'block';
             setTimeout(() => {
               formSuccess.style.display = 'none';
@@ -70,7 +65,6 @@ const Forms = {
             submitButton.textContent = 'Enviar';
           }
           
-          // Reset adicional para garantir limpeza
           contactForm.reset();
         }
       });

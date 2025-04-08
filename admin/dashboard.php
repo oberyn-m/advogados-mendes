@@ -3,7 +3,6 @@ session_start();
 require_once 'config.php';
 checkAuth();
 
-// Nova função para ler os artigos do arquivo JavaScript
 function readArticles() {
     $file = '../js/articles-data.js';
     
@@ -13,15 +12,12 @@ function readArticles() {
     
     $content = file_get_contents($file);
     
-    // Extrai o array JSON do arquivo JavaScript
     if (preg_match('/const\s+articlesData\s+=\s+(\[.*?\]);/s', $content, $matches)) {
         $jsonStr = $matches[1];
-        // Converte as propriedades JavaScript para formato JSON válido
         $jsonStr = preg_replace('/(\w+):/', '"$1":', $jsonStr);
         $articles = json_decode($jsonStr, true);
         
         if (json_last_error() !== JSON_ERROR_NONE) {
-            // Se houver erro no parsing, analisa manualmente
             $articles = parseArticlesManually($content);
         }
         
@@ -31,7 +27,6 @@ function readArticles() {
     return [];
 }
 
-// Função para análise manual caso o JSON não possa ser parseado diretamente
 function parseArticlesManually($content) {
     $articles = [];
     $pattern = '/{\s*title:\s*"(.*?)",\s*image:\s*"(.*?)",\s*date:\s*"(.*?)",\s*description:\s*"(.*?)",\s*content:\s*"(.*?)"\s*}/s';
@@ -51,27 +46,22 @@ function parseArticlesManually($content) {
     return $articles;
 }
 
-// Nova função para salvar os artigos no arquivo JavaScript
 function saveArticles($articles) {
-    $jsContent = "/**\n * Dados dos artigos em formato JavaScript\n * Esta abordagem elimina os problemas de carregamento do arquivo markdown\n */\n\nconst articlesData = [\n";
+    $jsContent = "const articlesData = [\n";
     
     foreach ($articles as $article) {
         if (empty($article['title']) || empty($article['description'])) {
             continue;
         }
         
-        // Formata a data no padrão brasileiro
         if (empty($article['date'])) {
             $article['date'] = date('d-m-Y');
         }
         
-        // Escapa as aspas e outros caracteres especiais
         $title = addslashes($article['title']);
         $image = addslashes($article['image']);
         $description = addslashes($article['description']);
         
-        // Preparar o conteúdo HTML para JavaScript
-        // Substitui quebras de linha por \n e escapa aspas
         $content = addslashes($article['content']);
         $content = str_replace(["\r\n", "\n"], "\\n", $content);
         
@@ -84,14 +74,11 @@ function saveArticles($articles) {
         $jsContent .= "  },\n";
     }
     
-    // Remove a última vírgula e fecha o array
     $jsContent = rtrim($jsContent, ",\n") . "\n];\n";
     
-    // Salva o arquivo
     file_put_contents('../js/articles-data.js', $jsContent);
 }
 
-// Processar ações
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
@@ -147,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$articles = readArticles(); // Use a nova função para ler os artigos
+$articles = readArticles();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -199,7 +186,6 @@ $articles = readArticles(); // Use a nova função para ler os artigos
                             <td><?php echo htmlspecialchars($article['title']); ?></td>
                             <td>
                                 <?php 
-                                // Limita a descrição a 50 caracteres para não quebrar o layout
                                 $description = htmlspecialchars($article['description']);
                                 echo strlen($description) > 50 ? substr($description, 0, 50) . '...' : $description; 
                                 ?>
@@ -254,12 +240,6 @@ $articles = readArticles(); // Use a nova função para ler os artigos
                         </div>
                         
                         <div class="mb-3">
-                            <label for="image" class="form-label">Imagem</label>
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
-                            <div id="currentImage" class="mt-2"></div>
-                        </div>
-                        
-                        <div class="mb-3">
                             <label for="description" class="form-label">Descrição</label>
                             <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                         </div>
@@ -267,6 +247,18 @@ $articles = readArticles(); // Use a nova função para ler os artigos
                         <div class="mb-3">
                             <label for="content" class="form-label">Conteúdo</label>
                             <textarea class="form-control" id="content" name="content" rows="10" required></textarea>
+                            <div id="contentHelp" class="form-text">
+                                Você pode usar HTML para formatar o conteúdo: &lt;b&gt;, &lt;i&gt;, &lt;p&gt;, etc.
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Imagem</label>
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                            <div id="imagePreview" class="mt-2 d-none">
+                                <label class="form-label">Imagem atual:</label>
+                                <img src="" alt="Preview" style="max-width: 200px; max-height: 200px;" class="d-block">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -278,45 +270,58 @@ $articles = readArticles(); // Use a nova função para ler os artigos
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Editar artigo
-            $('.edit-article').click(function() {
-                const form = $('#articleModal form');
-                form.find('[name="action"]').val('edit');
-                form.find('[name="index"]').val($(this).data('index'));
-                form.find('[name="current_image"]').val($(this).data('image'));
-                form.find('#title').val($(this).data('title'));
-                form.find('#description').val($(this).data('description'));
-                form.find('#content').val($(this).data('content'));
-                
-                const currentImage = $('#currentImage');
-                const imagePath = $(this).data('image');
-                if (imagePath) {
-                    // Verifica se a imagem é um link externo (http/https) ou um caminho local
-                    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-                        currentImage.html(`<img src="${imagePath}" class="img-thumbnail" style="max-height: 100px">`);
+        document.addEventListener('DOMContentLoaded', function() {
+            const articleModal = document.getElementById('articleModal');
+            if (articleModal) {
+                articleModal.addEventListener('show.bs.modal', function(event) {
+                    const button = event.relatedTarget;
+                    const isEdit = button.classList.contains('edit-article');
+                    
+                    const titleInput = document.getElementById('title');
+                    const descriptionInput = document.getElementById('description');
+                    const contentInput = document.getElementById('content');
+                    const actionInput = document.querySelector('input[name="action"]');
+                    const indexInput = document.querySelector('input[name="index"]');
+                    const currentImageInput = document.querySelector('input[name="current_image"]');
+                    const imagePreview = document.getElementById('imagePreview');
+                    const modalTitle = this.querySelector('.modal-title');
+                    
+                    if (isEdit) {
+                        const index = button.getAttribute('data-index');
+                        const title = button.getAttribute('data-title');
+                        const description = button.getAttribute('data-description');
+                        const content = button.getAttribute('data-content');
+                        const image = button.getAttribute('data-image');
+                        
+                        actionInput.value = 'edit';
+                        indexInput.value = index;
+                        titleInput.value = title;
+                        descriptionInput.value = description;
+                        contentInput.value = content;
+                        currentImageInput.value = image;
+                        modalTitle.textContent = 'Editar Artigo';
+                        
+                        if (image) {
+                            imagePreview.classList.remove('d-none');
+                            const img = imagePreview.querySelector('img');
+                            img.src = '../' + image;
+                        } else {
+                            imagePreview.classList.add('d-none');
+                        }
                     } else {
-                        currentImage.html(`<img src="../${imagePath}" class="img-thumbnail" style="max-height: 100px">`);
+                        actionInput.value = 'add';
+                        indexInput.value = '';
+                        titleInput.value = '';
+                        descriptionInput.value = '';
+                        contentInput.value = '';
+                        currentImageInput.value = '';
+                        modalTitle.textContent = 'Novo Artigo';
+                        imagePreview.classList.add('d-none');
                     }
-                } else {
-                    currentImage.empty();
-                }
-            });
-
-            // Novo artigo
-            $('#articleModal').on('hidden.bs.modal', function() {
-                const form = $(this).find('form');
-                form.find('[name="action"]').val('add');
-                form.find('[name="index"]').val('');
-                form.find('[name="current_image"]').val('');
-                form.find('#title').val('');
-                form.find('#description').val('');
-                form.find('#content').val('');
-                $('#currentImage').empty();
-            });
+                });
+            }
         });
     </script>
 </body>

@@ -2,8 +2,7 @@
   <div class="container">
     <div class="footer-content">
       <div class="footer-logo">
-        <h2 class="footer-brand">Mendes Advocacia</h2>
-        <p>Especialistas em Direito do Trabalho</p>
+        <a href="/advogados-mendes/" class="footer-brand">Mendes Advocacia</a>
       </div>
       <div class="footer-contact">
         <h3>Contato</h3>
@@ -21,12 +20,11 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; <?php echo date('Y'); ?> Mendes Advocacia. Todos os direitos reservados.</p>
+      <p>&copy; <?php echo date('Y'); ?> <a href="/advogados-mendes/">Mendes Advocacia</a>. Todos os direitos reservados.</p>
     </div>
   </div>
 </footer>
 
-<!-- Scripts -->
 <script src="js/modules/navigation.js"></script>
 <script src="js/articles-data.js"></script>
 <script src="js/articles.js"></script>

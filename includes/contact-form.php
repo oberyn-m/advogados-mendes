@@ -60,7 +60,9 @@ require_once 'config.php';
             style="border:0;"
             allowfullscreen=""
             loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade">
+            referrerpolicy="no-referrer"
+            title="Localização do escritório"
+            onerror="this.outerHTML='<div class=\'map-fallback\'><p>Mapa não disponível. <a href=\'https://goo.gl/maps/1JjYxGsXCDPmUJYL6\' target=\'_blank\' rel=\'noopener\'>Ver no Google Maps</a></p></div>'">
           </iframe>
         </div>
       </div>

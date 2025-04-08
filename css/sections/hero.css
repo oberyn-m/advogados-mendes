@@ -1,29 +1,23 @@
-/* Hero Section */
 .hero {
-  /* Background com gradiente sobreposto à imagem */
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
               url('../../img/hero-bg.jpg') center/cover no-repeat;
-  /* Ajustes de tamanho e posicionamento */
   margin: 0;
   width: 100%;
-  /* Definir altura para ocupar toda a viewport visível abaixo do header */
   height: 100vh;
-  padding-top: 60px; /* Altura do header - reduzido de 80px para 60px */
+  padding-top: 60px;
   position: relative;
   display: flex;
-  align-items: center; /* Centraliza conteúdo verticalmente */
+  align-items: center;
   justify-content: center;
-  /* box-sizing é crucial para padding incluir na altura */
   box-sizing: border-box;
-  overflow: hidden; /* Evita barras de rolagem se a imagem for maior */
+  overflow: hidden;
 }
 
 .hero-content {
   width: 100%;
   max-width: 1200px;
-  padding: 20px; /* Padding interno do conteúdo */
+  padding: 20px;
   text-align: center;
-  /* Altura e padding removidos daqui */
 }
 
 .hero h1 {
@@ -44,7 +38,7 @@
 
 .scroll-down {
   position: absolute;
-  bottom: 20px; /* Ajustado para ficar mais acima */
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   color: #fff;

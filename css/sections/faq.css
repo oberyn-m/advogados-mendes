@@ -1,4 +1,3 @@
-/* Estilos para a seção de FAQ */
 .faq {
   background-color: var(--background-light);
   padding: 80px 0;
@@ -7,7 +6,7 @@
   justify-content: center;
   box-sizing: border-box;
   width: 100%;
-  min-height: calc(100vh - 10vh); /* Ajustado para exatamente o espaço disponível menos o header */
+  min-height: calc(100vh - 10vh);
 }
 
 .faq .section-header {

@@ -14,7 +14,6 @@
   animation: bounce 1.5s infinite;
 }
 
-/* Hamburger Animation */
 .hamburger.open {
   background: transparent;
 }

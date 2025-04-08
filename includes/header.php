@@ -12,19 +12,19 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome para ícones -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <link rel="stylesheet" href="css/main.css">
   
 </head>
 <body>
-  <!-- Header simples com menu de navegação -->
   <header class="header">
     <div class="container">
       <div class="header-content">
-        <a href="/" class="logo">Mendes Advocacia</a>
-        
+        <a href="/advogados-mendes/" class="logo">Mendes Advocacia</a>
+        <button class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="navbar-collapse">
+          <span class="hamburger"></span>
+        </button>
         <nav class="nav">
           <ul class="menu">
             <li class="menu-item"><a href="#inicio" class="menu-link">Início</a></li>

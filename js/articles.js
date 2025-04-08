@@ -20,14 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function displayArticles() {
   try {
-    console.log("Usando dados estruturados para exibir artigos");
-    
     // Verifica se os dados de artigos estão disponíveis (de articles-data.js)
     if (typeof articlesData === 'undefined') {
       throw new Error("Dados de artigos não encontrados. Verifique se o arquivo articles-data.js está incluído corretamente.");
     }
-    
-    console.log(`Artigos disponíveis: ${articlesData.length}`);
     
     // Ordenar artigos por data (mais recentes primeiro)
     sortedArticles = [...articlesData].sort((a, b) => {
@@ -43,13 +39,11 @@ function displayArticles() {
     renderArticlesPage(currentPage);
     
   } catch (error) {
-    console.error("Erro ao exibir artigos:", error);
     const articlesContainer = document.getElementById("articlesContainer");
     if (articlesContainer) {
       articlesContainer.innerHTML = `
         <div class="no-articles-message">
           <p>Erro ao carregar artigos: ${error.message}</p>
-          <p>Verifique o console para mais detalhes.</p>
         </div>
       `;
     }
@@ -72,7 +66,6 @@ function renderArticlesPage(page) {
   const modalsContainer = document.getElementById("articleModalsContainer");
   
   if (!articlesContainer) {
-    console.error("Container de artigos não encontrado");
     return;
   }
   
@@ -154,7 +147,6 @@ function renderArticlesPage(page) {
   
   // Adiciona event listeners aos modais criados
   initializeArticleModals();
-  console.log(`Página ${page} renderizada com ${pageArticles.length} artigos.`);
 }
 
 /**

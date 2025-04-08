@@ -7,7 +7,6 @@
   box-sizing: border-box;
 }
 
-/* Centraliza o título */
 .section-header {
   text-align: center;
   margin-bottom: 50px;
@@ -28,7 +27,6 @@
   text-align: center;
 }
 
-/* Organiza o conteúdo em duas colunas */
 .about-content {
   display: flex;
   flex-direction: row;
@@ -37,7 +35,6 @@
   gap: 40px;
 }
 
-/* Texto à esquerda */
 .about-text {
   flex: 1;
   text-align: left;
@@ -49,10 +46,9 @@
   line-height: 1.8;
   color: #444;
   text-align: left;
-  font-size: 1.1rem; /* Increased text size */
+  font-size: 1.1rem;
 }
 
-/* Imagem à direita */
 .about-image {
   flex: 1;
   border-radius: 8px;
@@ -73,7 +69,6 @@
   transform: scale(1.03);
 }
 
-/* Add more content if needed to fill space */
 .about-text .additional-content {
   margin-top: 30px;
 }

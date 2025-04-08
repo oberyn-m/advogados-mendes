@@ -1,100 +1,108 @@
 <?php
-// Importar o PHPMailer
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
-
-// Carregar o autoloader do Composer
 require 'vendor/autoload.php';
 
-// Verificar se é uma requisição POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Obter os dados do formulário
-    $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
-    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    $telefone = filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING);
-    $mensagem = filter_input(INPUT_POST, 'mensagem', FILTER_SANITIZE_STRING);
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['success' => false, 'message' => 'Método não permitido']);
+    exit;
+}
+
+if (
+    empty($_POST['nome']) ||
+    empty($_POST['email']) ||
+    empty($_POST['telefone']) ||
+    empty($_POST['assunto']) ||
+    empty($_POST['mensagem'])
+) {
+    echo json_encode(['success' => false, 'message' => 'Todos os campos são obrigatórios']);
+    exit;
+}
+
+$nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_SPECIAL_CHARS);
+$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+$telefone = filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_SPECIAL_CHARS);
+$assunto = filter_input(INPUT_POST, 'assunto', FILTER_SANITIZE_SPECIAL_CHARS);
+$mensagem = filter_input(INPUT_POST, 'mensagem', FILTER_SANITIZE_SPECIAL_CHARS);
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo json_encode(['success' => false, 'message' => 'E-mail inválido']);
+    exit;
+}
+
+try {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
     
-    // Validar os dados
-    if (empty($nome) || empty($email) || empty($mensagem)) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Por favor, preencha todos os campos obrigatórios.']);
-        exit;
-    }
-    
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Por favor, forneça um email válido.']);
-        exit;
-    }
-    
-    // Configurar o PHPMailer
     $mail = new PHPMailer(true);
     
-    try {
-        // Carregar configurações do .env
-        $env = parse_ini_file('.env');
-        
-        // Configurações do servidor (Gmail)
-        $mail->isSMTP();
-        $mail->Host = $env['SMTP_HOST'];
-        $mail->SMTPAuth = true;
-        $mail->Username = $env['SMTP_USERNAME'];
-        $mail->Password = $env['SMTP_PASSWORD'];
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = $env['SMTP_PORT'];
-        $mail->CharSet = 'UTF-8';
-        
-        // Destinatários
-        $mail->setFrom('isaachavester@gmail.com', 'Teste Formulário');
-        $mail->addAddress('isaachavester@gmail.com', 'Teste Mendes'); // Email que receberá as mensagens
-        $mail->addReplyTo($email, $nome);
-        
-        // Conteúdo
-        $mail->isHTML(true);
-        $mail->Subject = 'Nova mensagem do site - Mendes Advocacia';
-        
-        // Corpo do email
-        $mail->Body = "
-            <h2>Nova mensagem do formulário de contato</h2>
-            <p><strong>Nome:</strong> {$nome}</p>
-            <p><strong>Email:</strong> {$email}</p>
-            <p><strong>Telefone:</strong> {$telefone}</p>
-            <p><strong>Mensagem:</strong></p>
-            <p>{$mensagem}</p>
-        ";
-        
-        $mail->AltBody = "
-            Nova mensagem do formulário de contato\n
-            Nome: {$nome}\n
-            Email: {$email}\n
-            Telefone: {$telefone}\n
-            Mensagem: {$mensagem}
-        ";
-        
-        // Enviar o email
-        $mail->send();
-        
-        // Resposta de sucesso - Garantir que headers e encoding estejam corretos
-        header('Content-Type: application/json; charset=utf-8');
-        echo json_encode([
-            'success' => true,
-            'message' => 'Mensagem enviada com sucesso!'
-        ], JSON_UNESCAPED_UNICODE);
-        exit;
-        
-    } catch (Exception $e) {
-        // Resposta de erro - Garantir que headers e encoding estejam corretos
-        header('Content-Type: application/json; charset=utf-8');
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'message' => 'Erro ao enviar mensagem: ' . $mail->ErrorInfo
-        ], JSON_UNESCAPED_UNICODE);
-        exit;
-    }
-} else {
-    // Modificar a linha que redireciona para a página inicial
-    header('Location: index.php');
-    exit;
+    $mail->isSMTP();
+    $mail->Host = $_ENV['SMTP_HOST'];
+    $mail->SMTPAuth = true;
+    $mail->Username = $_ENV['SMTP_USER'];
+    $mail->Password = $_ENV['SMTP_PASS'];
+    $mail->SMTPSecure = 'tls';
+    $mail->Port = 587;
+    $mail->CharSet = 'UTF-8';
+    
+    $mail->setFrom($_ENV['SMTP_USER'], 'Formulário de Contato');
+    $mail->addAddress($_ENV['EMAIL_TO']);
+    $mail->addReplyTo($email, $nome);
+    
+    $mail->isHTML(true);
+    $mail->Subject = 'Contato via Site: ' . $assunto;
+    
+    $mailBody = "
+    <html>
+    <head>
+        <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            h2 { color: #1c0b2b; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+            .message-details { background-color: #f9f9f9; padding: 15px; border-radius: 5px; }
+            .field { margin-bottom: 10px; }
+            .label { font-weight: bold; color: #555; }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <h2>Nova mensagem de contato</h2>
+            
+            <div class='message-details'>
+                <div class='field'>
+                    <span class='label'>Nome:</span> {$nome}
+                </div>
+                <div class='field'>
+                    <span class='label'>E-mail:</span> {$email}
+                </div>
+                <div class='field'>
+                    <span class='label'>Telefone:</span> {$telefone}
+                </div>
+                <div class='field'>
+                    <span class='label'>Assunto:</span> {$assunto}
+                </div>
+                
+                <div class='field'>
+                    <span class='label'>Mensagem:</span>
+                    <p>" . nl2br($mensagem) . "</p>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    ";
+    
+    $mail->Body = $mailBody;
+    $mail->AltBody = "Nome: $nome\nE-mail: $email\nTelefone: $telefone\nAssunto: $assunto\nMensagem: $mensagem";
+    
+    $mail->send();
+    
+    echo json_encode(['success' => true, 'message' => 'Mensagem enviada com sucesso!']);
+    
+} catch (Exception $e) {
+    error_log('Erro ao enviar e-mail: ' . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Não foi possível enviar sua mensagem. Por favor, tente novamente mais tarde.']);
 }

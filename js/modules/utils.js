@@ -1,7 +1,4 @@
 const Utils = {
-  // Funções utilitárias que podem ser usadas por vários módulos
-  
-  // Exemplo: debounce para otimizar eventos como scroll ou resize
   debounce: function(func, wait, immediate) {
     let timeout;
     return function() {
@@ -17,7 +14,6 @@ const Utils = {
     };
   },
   
-  // Exemplo: formatação de data
   formatDate: function(dateString) {
     const date = new Date(dateString);
     if (isNaN(date)) return dateString;
