@@ -10,7 +10,7 @@
   <meta http-equiv="Cache-Control" content="public, max-age=31536000">
   
   <!-- Favicon -->
-  <link rel="icon" href="./img/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/advogados-mendes/img/favicon.ico" type="image/x-icon">
   
   <!-- Preload recursos críticos -->
   <link rel="preload" href="./css/main.css" as="style">

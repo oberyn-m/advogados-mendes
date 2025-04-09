@@ -273,7 +273,6 @@ const Forms = {
           }
         })
         .catch(error => {
-          console.error('Erro:', error);
           alert('Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente.');
         })
         .finally(() => {

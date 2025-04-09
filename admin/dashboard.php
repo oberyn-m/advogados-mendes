@@ -1,6 +1,6 @@
 <?php
-session_start();
 require_once __DIR__ . '/../includes/config.php';
+session_start();
 checkAuth();
 
 function readArticles() {
@@ -20,6 +20,13 @@ function readArticles() {
         if (json_last_error() !== JSON_ERROR_NONE) {
             $articles = parseArticlesManually($content);
         }
+
+        // Tratar o caminho das imagens removendo o prefixo /advogados-mendes/
+        foreach ($articles as &$article) {
+            if (!empty($article['image'])) {
+                $article['image'] = str_replace('/advogados-mendes/', '', $article['image']);
+            }
+        }
         
         return $articles;
     }
@@ -29,16 +36,17 @@ function readArticles() {
 
 function parseArticlesManually($content) {
     $articles = [];
-    $pattern = '/{\s*title:\s*"(.*?)",\s*image:\s*"(.*?)",\s*date:\s*"(.*?)",\s*description:\s*"(.*?)",\s*content:\s*"(.*?)"\s*}/s';
+    $pattern = '/{\s*id:\s*"(.*?)",\s*title:\s*"(.*?)",\s*image:\s*"(.*?)",\s*date:\s*"(.*?)",\s*description:\s*"(.*?)",\s*content:\s*"(.*?)"\s*}/s';
     
     if (preg_match_all($pattern, $content, $matches, PREG_SET_ORDER)) {
         foreach ($matches as $match) {
             $articles[] = [
-                'title' => stripcslashes($match[1]),
-                'image' => stripcslashes($match[2]),
-                'date' => stripcslashes($match[3]),
-                'description' => stripcslashes($match[4]),
-                'content' => stripcslashes($match[5])
+                'id' => stripcslashes($match[1]),
+                'title' => stripcslashes($match[2]),
+                'image' => stripcslashes($match[3]),
+                'date' => stripcslashes($match[4]),
+                'description' => stripcslashes($match[5]),
+                'content' => stripcslashes($match[6])
             ];
         }
     }
@@ -57,15 +65,20 @@ function saveArticles($articles) {
         if (empty($article['date'])) {
             $article['date'] = date('d-m-Y');
         }
+
+        // Garante que cada artigo tenha um ID
+        if (empty($article['id'])) {
+            $article['id'] = uniqid();
+        }
         
         $title = addslashes($article['title']);
         $image = addslashes($article['image']);
         $description = addslashes($article['description']);
-        
         $content = addslashes($article['content']);
         $content = str_replace(["\r\n", "\n"], "\\n", $content);
         
         $jsContent .= "  {\n";
+        $jsContent .= "    id: \"{$article['id']}\",\n";
         $jsContent .= "    title: \"{$title}\",\n";
         $jsContent .= "    image: \"{$image}\",\n";
         $jsContent .= "    date: \"{$article['date']}\",\n";
@@ -79,16 +92,63 @@ function saveArticles($articles) {
     file_put_contents('../js/articles-data.js', $jsContent);
 }
 
+function cleanUnusedImages() {
+    // Lê todos os artigos para obter as imagens em uso
+    $articles = readArticles();
+    $usedImages = [];
+    
+    // Coleta todas as imagens em uso
+    foreach ($articles as $article) {
+        if (!empty($article['image'])) {
+            // Remove o prefixo 'uploads/' se existir
+            $imageName = str_replace('uploads/', '', $article['image']);
+            $usedImages[] = $imageName;
+        }
+    }
+    
+    // Lê todos os arquivos na pasta uploads
+    $uploadsDir = __DIR__ . '/../uploads';
+    $allImages = scandir($uploadsDir);
+    $deletedCount = 0;
+    
+    // Verifica cada arquivo na pasta uploads
+    foreach ($allImages as $file) {
+        // Ignora . e ..
+        if ($file === '.' || $file === '..') {
+            continue;
+        }
+        
+        // Se a imagem não está sendo usada, deleta
+        if (!in_array($file, $usedImages)) {
+            $filePath = $uploadsDir . '/' . $file;
+            if (unlink($filePath)) {
+                $deletedCount++;
+            }
+        }
+    }
+    
+    return $deletedCount;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
+            case 'clean_images':
+                $deletedCount = cleanUnusedImages();
+                $_SESSION['message'] = "Foram removidas $deletedCount imagens não utilizadas.";
+                header('Location: dashboard.php');
+                exit;
+                break;
+                
             case 'add':
                 $articles = readArticles();
                 $newArticle = [
+                    'id' => uniqid(),
                     'title' => $_POST['title'],
                     'image' => '',
                     'description' => $_POST['description'],
-                    'content' => $_POST['content']
+                    'content' => $_POST['content'],
+                    'date' => date('d-m-Y')
                 ];
                 
                 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -104,22 +164,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
             case 'edit':
                 $articles = readArticles();
-                $index = $_POST['index'];
-                $articles[$index] = [
-                    'title' => $_POST['title'],
-                    'image' => $_POST['current_image'],
-                    'description' => $_POST['description'],
-                    'content' => $_POST['content']
-                ];
+                $articleId = $_POST['article_id'];
                 
-                if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                    $upload = handleImageUpload($_FILES['image']);
-                    if ($upload['success']) {
-                        $articles[$index]['image'] = 'uploads/' . $upload['filename'];
+                // Encontra o artigo pelo ID
+                $articleToUpdate = null;
+                $articleIndex = null;
+                
+                foreach ($articles as $index => $article) {
+                    if (isset($article['id']) && $article['id'] === $articleId) {
+                        $articleToUpdate = $article;
+                        $articleIndex = $index;
+                        break;
                     }
                 }
                 
-                saveArticles($articles);
+                if ($articleToUpdate !== null) {
+                    // Atualiza apenas os campos modificados
+                    $articles[$articleIndex] = [
+                        'id' => $articleId, // Mantém o ID original
+                        'title' => $_POST['title'],
+                        'description' => $_POST['description'],
+                        'content' => $_POST['content'],
+                        'date' => $articleToUpdate['date'], // Mantém a data original
+                        'image' => $_POST['current_image'] // Mantém a imagem atual se não houver nova
+                    ];
+                    
+                    // Processa nova imagem se enviada
+                    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                        $upload = handleImageUpload($_FILES['image']);
+                        if ($upload['success']) {
+                            $articles[$articleIndex]['image'] = 'uploads/' . $upload['filename'];
+                        }
+                    }
+                    
+                    saveArticles($articles);
+                }
                 break;
                 
             case 'delete':
@@ -142,6 +221,7 @@ $articles = readArticles();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo - Artigos</title>
+    <link rel="icon" href="/advogados-mendes/img/favicon.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -164,9 +244,11 @@ $articles = readArticles();
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Gerenciar Artigos</h2>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#articleModal">
-                Novo Artigo
-            </button>
+            <div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#articleModal">
+                    Novo Artigo
+                </button>
+            </div>
         </div>
 
         <div class="table-responsive">
@@ -197,7 +279,7 @@ $articles = readArticles();
                                 <button type="button" class="btn btn-sm btn-primary edit-article" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#articleModal"
-                                        data-index="<?php echo $index; ?>"
+                                        data-id="<?php echo htmlspecialchars($article['id'] ?? ''); ?>"
                                         data-title="<?php echo htmlspecialchars($article['title']); ?>"
                                         data-description="<?php echo htmlspecialchars($article['description']); ?>"
                                         data-content="<?php echo htmlspecialchars($article['content']); ?>"
@@ -230,9 +312,9 @@ $articles = readArticles();
                 </div>
                 <form method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
-                        <input type="hidden" name="action" value="add">
-                        <input type="hidden" name="index" value="">
-                        <input type="hidden" name="current_image" value="">
+                        <input type="hidden" name="action" value="add" id="formAction">
+                        <input type="hidden" name="article_id" id="articleId">
+                        <input type="hidden" name="current_image" id="currentImage">
                         
                         <div class="mb-3">
                             <label for="title" class="form-label">Título</label>
@@ -257,7 +339,7 @@ $articles = readArticles();
                             <input type="file" class="form-control" id="image" name="image" accept="image/*">
                             <div id="imagePreview" class="mt-2 d-none">
                                 <label class="form-label">Imagem atual:</label>
-                                <img src="" alt="Preview" style="max-width: 200px; max-height: 200px;" class="d-block">
+                                <img data-preview alt="Preview" style="max-width: 200px; max-height: 200px;" class="d-block">
                             </div>
                         </div>
                     </div>
@@ -282,21 +364,22 @@ $articles = readArticles();
                     const titleInput = document.getElementById('title');
                     const descriptionInput = document.getElementById('description');
                     const contentInput = document.getElementById('content');
-                    const actionInput = document.querySelector('input[name="action"]');
-                    const indexInput = document.querySelector('input[name="index"]');
-                    const currentImageInput = document.querySelector('input[name="current_image"]');
+                    const actionInput = document.getElementById('formAction');
+                    const articleIdInput = document.getElementById('articleId');
+                    const currentImageInput = document.getElementById('currentImage');
                     const imagePreview = document.getElementById('imagePreview');
+                    const previewImg = imagePreview.querySelector('[data-preview]');
                     const modalTitle = this.querySelector('.modal-title');
                     
                     if (isEdit) {
-                        const index = button.getAttribute('data-index');
+                        const id = button.getAttribute('data-id');
                         const title = button.getAttribute('data-title');
                         const description = button.getAttribute('data-description');
                         const content = button.getAttribute('data-content');
                         const image = button.getAttribute('data-image');
                         
                         actionInput.value = 'edit';
-                        indexInput.value = index;
+                        articleIdInput.value = id;
                         titleInput.value = title;
                         descriptionInput.value = description;
                         contentInput.value = content;
@@ -305,21 +388,28 @@ $articles = readArticles();
                         
                         if (image) {
                             imagePreview.classList.remove('d-none');
-                            const img = imagePreview.querySelector('img');
-                            img.src = '../' + image;
+                            previewImg.src = '../' + image;
                         } else {
                             imagePreview.classList.add('d-none');
+                            previewImg.removeAttribute('src');
                         }
                     } else {
                         actionInput.value = 'add';
-                        indexInput.value = '';
+                        articleIdInput.value = '';
                         titleInput.value = '';
                         descriptionInput.value = '';
                         contentInput.value = '';
                         currentImageInput.value = '';
                         modalTitle.textContent = 'Novo Artigo';
                         imagePreview.classList.add('d-none');
+                        previewImg.removeAttribute('src');
                     }
+                });
+
+                // Limpa o formulário ao fechar o modal
+                articleModal.addEventListener('hidden.bs.modal', function() {
+                    const form = this.querySelector('form');
+                    form.reset();
                 });
             }
         });

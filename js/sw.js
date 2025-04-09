@@ -9,11 +9,7 @@ const urlsToCache = [
     '/advogados-mendes/js/modules/forms.js',
     '/advogados-mendes/img/placeholder.jpg',
     '/advogados-mendes/img/lawyer.jpg',
-    '/advogados-mendes/img/hero-bg.jpg',
-    '/advogados-mendes/uploads/67f04eb34d578.jpg',
-    '/advogados-mendes/uploads/67f04eeef0043.jpg',
-    '/advogados-mendes/uploads/67f56467b3bd4.jpg',
-    '/advogados-mendes/uploads/67f56fecba5b2.jpg'
+    '/advogados-mendes/img/hero-bg.jpg'
 ];
 
 // Instalação do Service Worker
