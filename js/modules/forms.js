@@ -247,7 +247,7 @@ const Forms = {
           formData.append('csrf_token', csrfToken.getAttribute('content'));
         }
         
-        fetch('process_contact.php', {
+        fetch('/advogados-mendes/includes/process_contact.php', {
           method: 'POST',
           body: formData,
           headers: {

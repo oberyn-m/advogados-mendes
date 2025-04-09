@@ -328,10 +328,7 @@ $articles = readArticles();
                         
                         <div class="mb-3">
                             <label for="content" class="form-label">Conteúdo</label>
-                            <textarea class="form-control" id="content" name="content" rows="10" required></textarea>
-                            <div id="contentHelp" class="form-text">
-                                Você pode usar HTML para formatar o conteúdo: &lt;b&gt;, &lt;i&gt;, &lt;p&gt;, etc.
-                            </div>
+                            <textarea class="form-control" id="content" name="content" rows="10" required style="resize: none;"></textarea>
                         </div>
                         
                         <div class="mb-3">

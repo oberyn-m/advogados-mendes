@@ -48,7 +48,7 @@ if (isset($_SESSION['message'])) {
           </div>
           <div class="form-group">
             <label for="mensagem">Mensagem <span class="char-count" id="mensagemCount">0/1000</span></label>
-            <textarea id="mensagem" name="mensagem" rows="5" required maxlength="1000"></textarea>
+            <textarea id="mensagem" name="mensagem" rows="5" required maxlength="1000" style="resize: none;"></textarea>
             <span class="error-message" id="mensagemError"></span>
           </div>
           <div class="form-group">
