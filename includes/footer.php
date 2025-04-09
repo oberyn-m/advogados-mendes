@@ -26,6 +26,7 @@
 </footer>
 
 <script src="js/modules/navigation.js"></script>
+<script src="js/modules/forms.js"></script>
 <script src="js/articles-data.js"></script>
 <script src="js/articles.js"></script>
 <script src="js/main.js"></script>

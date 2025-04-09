@@ -1,5 +1,13 @@
 <?php 
-require_once 'config.php';
+require_once __DIR__ . '/../config.php';
+
+// Verifica se há mensagens para exibir
+$message = null;
+if (isset($_SESSION['message'])) {
+    $message = $_SESSION['message'];
+    // Limpa a mensagem da sessão para que não seja exibida novamente
+    unset($_SESSION['message']);
+}
 ?>
 
 <section class="section contact-section"> 
@@ -8,48 +16,57 @@ require_once 'config.php';
       <h2>Entre em Contato</h2>
       <p>Estamos prontos para ajudar você</p>
     </div>
+    
+    <?php if ($message): ?>
+    <div class="alert alert-<?php echo $message['type']; ?>">
+      <?php echo $message['text']; ?>
+    </div>
+    <?php endif; ?>
+    
     <div class="contact-container">
       <div class="contact-form-container">
         <form id="contactForm" class="contact-form" action="process_contact.php" method="POST">
           <div class="form-group">
-            <label for="nome">Nome Completo</label>
-            <input type="text" id="nome" name="nome" required />
+            <label for="nome">Nome Completo <span class="char-count" id="nomeCount">0/200</span></label>
+            <input type="text" id="nome" name="nome" required maxlength="200" />
+            <span class="error-message" id="nomeError"></span>
           </div>
           <div class="form-group">
             <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" required />
+            <input type="email" id="email" name="email" required placeholder="seu@email.com" />
+            <span class="error-message" id="emailError"></span>
           </div>
           <div class="form-group">
             <label for="telefone">Telefone</label>
-            <input type="tel" id="telefone" name="telefone" required />
+            <input type="tel" id="telefone" name="telefone" required placeholder="(XX) XXXXX-XXXX ou (XX) XXXX-XXXX" />
+            <span class="error-message" id="telefoneError"></span>
           </div>
           <div class="form-group">
-            <label for="assunto">Assunto</label>
-            <input type="text" id="assunto" name="assunto" required />
+            <label for="assunto">Assunto <span class="char-count" id="assuntoCount">0/200</span></label>
+            <input type="text" id="assunto" name="assunto" required maxlength="200" />
+            <span class="error-message" id="assuntoError"></span>
           </div>
           <div class="form-group">
-            <label for="mensagem">Mensagem</label>
-            <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
+            <label for="mensagem">Mensagem <span class="char-count" id="mensagemCount">0/1000</span></label>
+            <textarea id="mensagem" name="mensagem" rows="5" required maxlength="1000"></textarea>
+            <span class="error-message" id="mensagemError"></span>
           </div>
           <div class="form-group">
             <button type="submit" class="btn btn-primary">Enviar</button>
-          </div>
-          <div id="formSuccess" class="form-success">
-            Mensagem enviada com sucesso! Entraremos em contato em breve.
           </div>
         </form>
       </div>
       <div class="contact-info">
         <div class="info-container">
           <h3>Informações de Contato</h3>
-          <p><i class="icon-location"></i> <?php echo $address; ?></p>
-          <p><i class="icon-phone"></i> <?php echo $phoneNumber; ?></p>
+          <p><i class="icon-location"></i> <?php echo $siteAddress; ?></p>
+          <p><i class="icon-phone"></i> <?php echo $sitePhone; ?></p>
           <p>
             <i class="icon-email"></i>
-            <?php echo $email; ?>
+            <?php echo $siteEmail; ?>
           </p>
           <h4>Horário de Atendimento</h4>
-          <p><?php echo $workingHours; ?></p>
+          <p>Segunda a Sexta: 9h às 18h<br>Sábado: 9h às 13h</p>
         </div>
         <div class="map-container">
           <h3>Localização</h3>

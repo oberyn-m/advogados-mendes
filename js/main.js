@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Inicializa o módulo Forms
+  if (typeof Forms !== 'undefined') {
+    Forms.init();
+  }
   
   initializeScrollButton();
 

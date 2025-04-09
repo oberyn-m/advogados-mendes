@@ -1,1 +1,144 @@
+/* Estilos padrão para desktop */
+.nav {
+  visibility: visible;
+  opacity: 1;
+  display: flex;
+  align-items: center;
+}
 
+.menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu-toggle {
+  display: none;
+}
+
+/* Responsividade do Header */
+@media screen and (max-width: 768px) {
+  .header {
+    height: 60px;
+  }
+
+  .header-content {
+    padding: 0 20px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1c0b2b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 999;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .nav.active {
+    transform: translateX(0);
+  }
+
+  .menu {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    max-height: 100vh;
+    padding: 60px 20px;
+    margin: 0;
+    overflow-y: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .menu::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  .menu-item {
+    height: auto;
+    width: 100%;
+    text-align: center;
+  }
+
+  .menu-link {
+    font-size: 18px;
+    padding: 10px 0;
+    width: 100%;
+    display: inline-block;
+  }
+
+  .menu-toggle {
+    display: block;
+    position: relative;
+    z-index: 1000;
+  }
+
+  .menu-toggle.active .hamburger {
+    background-color: transparent;
+  }
+
+  .menu-toggle.active .hamburger::before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+
+  .menu-toggle.active .hamburger::after {
+    transform: rotate(-45deg);
+    bottom: 0;
+  }
+
+  .logo-mobile {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+  }
+
+  .nav:not(.active) {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.3s, opacity 0.3s ease, transform 0.3s ease;
+  }
+}
+
+/* Estilos para quando o menu está aberto */
+body.menu-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+/* Ajustes para telas muito pequenas */
+@media screen and (max-width: 480px) {
+  .logo {
+    font-size: 18px;
+  }
+
+  .menu-link {
+    font-size: 16px;
+  }
+
+  .logo-mobile {
+    font-size: 20px;
+  }
+}
