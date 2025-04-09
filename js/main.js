@@ -107,7 +107,40 @@
     });
   };
 
-  // Inicialização do módulo
+  // Implementação de lazy loading para imagens
+  const lazyLoadImages = () => {
+    const images = document.querySelectorAll('img[data-src]');
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+          observer.unobserve(img);
+        }
+      });
+    });
+
+    images.forEach(img => imageObserver.observe(img));
+  };
+
+  // Otimização de recursos com preload
+  const preloadCriticalResources = () => {
+    const resources = [
+      './css/main.css',
+      './js/main.js'
+    ];
+
+    resources.forEach(resource => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.href = resource;
+      link.as = resource.endsWith('.css') ? 'style' : 'script';
+      document.head.appendChild(link);
+    });
+  };
+
+  // Inicialização otimizada
   const init = () => {
     document.addEventListener("DOMContentLoaded", () => {
       cacheDOMElements();
@@ -115,6 +148,8 @@
       initializeScrollButton();
       initializeFAQ();
       initializeFloatingIcons();
+      lazyLoadImages();
+      preloadCriticalResources();
     });
   };
 
@@ -162,7 +197,7 @@ window.addEventListener('scroll', function() {
 // Registro do Service Worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/js/sw.js')
+        navigator.serviceWorker.register('/sw.js')
             .then(registration => {
                 console.log('ServiceWorker registrado com sucesso:', registration.scope);
             })

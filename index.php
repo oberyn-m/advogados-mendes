@@ -2,6 +2,16 @@
 require_once __DIR__ . '/includes/config.php';
 session_start();
 
+// Ativar compressão GZIP
+if (!ob_start("ob_gzhandler")) {
+    ob_start();
+}
+
+// Configurar cache do navegador
+$cache_time = 60 * 60 * 24 * 7; // 1 semana
+header("Cache-Control: public, max-age=$cache_time");
+header("Expires: " . gmdate("D, d M Y H:i:s", time() + $cache_time) . " GMT");
+
 // Verificação de ambiente local mais precisa
 $isLocalhost = (
     preg_match('/^localhost(:81)?$/', $_SERVER['HTTP_HOST']) || 

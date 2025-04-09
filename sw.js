@@ -1,20 +1,19 @@
 const CACHE_NAME = 'advogados-mendes-v1';
 const urlsToCache = [
-    '/',
-    '/css/main.css',
-    '/js/main.js',
-    '/img/logo.png',
-    '/img/lawyer.jpg',
-    '/img/hero-bg.jpg',
-    '/img/about-img.jpg',
-    '/img/team-1.jpg',
-    '/img/team-2.jpg',
-    '/img/team-3.jpg',
-    '/img/team-4.jpg',
-    '/img/testimonial-1.jpg',
-    '/img/testimonial-2.jpg',
-    '/img/testimonial-3.jpg',
-    '/img/contact-bg.jpg'
+    './',
+    './css/main.css',
+    './js/main.js',
+    './img/lawyer.jpg',
+    './img/hero-bg.jpg',
+    './img/about-img.jpg',
+    './img/team-1.jpg',
+    './img/team-2.jpg',
+    './img/team-3.jpg',
+    './img/team-4.jpg',
+    './img/testimonial-1.jpg',
+    './img/testimonial-2.jpg',
+    './img/testimonial-3.jpg',
+    './img/contact-bg.jpg'
 ];
 
 // Instalação do Service Worker

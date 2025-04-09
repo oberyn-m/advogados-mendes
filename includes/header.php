@@ -10,12 +10,12 @@
   <meta http-equiv="Cache-Control" content="public, max-age=31536000">
   
   <!-- Favicon -->
-  <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="./img/favicon.ico" type="image/x-icon">
   
   <!-- Preload recursos críticos -->
-  <link rel="preload" href="css/main.css" as="style">
-  <link rel="preload" href="js/main.js" as="script">
-  <link rel="preload" href="img/lawyer.jpg" as="image">
+  <link rel="preload" href="./css/main.css" as="style">
+  <link rel="preload" href="./js/main.js" as="script">
+  <link rel="preload" href="./img/lawyer.jpg" as="image">
   
   <!-- Preconnect para recursos externos -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,8 +26,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   
   <!-- CSS principal com loading otimizado -->
-  <link rel="stylesheet" href="css/main.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="css/main.css"></noscript>
+  <link rel="stylesheet" href="./css/main.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./css/main.css"></noscript>
   
   <!-- Ícones com loading otimizado -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
@@ -65,7 +65,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/js/sw.js')
+        navigator.serviceWorker.register('./sw.js')
           .then(registration => {
             console.log('ServiceWorker registrado com sucesso:', registration.scope);
           })
