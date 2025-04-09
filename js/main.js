@@ -114,14 +114,20 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const img = entry.target;
-          img.src = img.dataset.src;
-          img.removeAttribute('data-src');
-          observer.unobserve(img);
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+            observer.unobserve(img);
+          }
         }
       });
     });
 
-    images.forEach(img => imageObserver.observe(img));
+    images.forEach(img => {
+      if (img.dataset.src) {
+        imageObserver.observe(img);
+      }
+    });
   };
 
   // Otimização de recursos com preload
@@ -160,23 +166,6 @@
 // Inicializa a aplicação
 App.init();
 
-// Lazy loading para imagens
-document.addEventListener('DOMContentLoaded', function() {
-    const images = document.querySelectorAll('img[data-src]');
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-                observer.unobserve(img);
-            }
-        });
-    });
-
-    images.forEach(img => imageObserver.observe(img));
-});
-
 // Otimização de scroll
 let scrollTimeout;
 window.addEventListener('scroll', function() {
@@ -193,16 +182,3 @@ window.addEventListener('scroll', function() {
         }
     });
 });
-
-// Registro do Service Worker
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('ServiceWorker registrado com sucesso:', registration.scope);
-            })
-            .catch(error => {
-                console.log('Falha ao registrar o ServiceWorker:', error);
-            });
-    });
-}

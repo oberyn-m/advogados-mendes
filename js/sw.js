@@ -1,20 +1,19 @@
 const CACHE_NAME = 'advogados-mendes-v1';
 const urlsToCache = [
-    '/',
-    '/css/main.css',
-    '/js/main.js',
-    '/img/logo.png',
-    '/img/lawyer.jpg',
-    '/img/hero-bg.jpg',
-    '/img/about-img.jpg',
-    '/img/team-1.jpg',
-    '/img/team-2.jpg',
-    '/img/team-3.jpg',
-    '/img/team-4.jpg',
-    '/img/testimonial-1.jpg',
-    '/img/testimonial-2.jpg',
-    '/img/testimonial-3.jpg',
-    '/img/contact-bg.jpg'
+    '/advogados-mendes/',
+    '/advogados-mendes/css/main.css',
+    '/advogados-mendes/js/main.js',
+    '/advogados-mendes/js/articles.js',
+    '/advogados-mendes/js/articles-data.js',
+    '/advogados-mendes/js/modules/navigation.js',
+    '/advogados-mendes/js/modules/forms.js',
+    '/advogados-mendes/img/placeholder.jpg',
+    '/advogados-mendes/img/lawyer.jpg',
+    '/advogados-mendes/img/hero-bg.jpg',
+    '/advogados-mendes/uploads/67f04eb34d578.jpg',
+    '/advogados-mendes/uploads/67f04eeef0043.jpg',
+    '/advogados-mendes/uploads/67f56467b3bd4.jpg',
+    '/advogados-mendes/uploads/67f56fecba5b2.jpg'
 ];
 
 // Instalação do Service Worker
@@ -22,7 +21,6 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('Cache aberto');
                 return cache.addAll(urlsToCache);
             })
     );

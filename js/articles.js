@@ -27,22 +27,28 @@ function setupLazyLoading() {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const img = entry.target;
-          img.src = img.dataset.src;
-          img.classList.remove('lazy');
-          observer.unobserve(img);
+          if (img.dataset && img.dataset.src) {
+            img.src = img.dataset.src;
+            img.classList.remove('lazy');
+            observer.unobserve(img);
+          }
         }
       });
     });
     
     // Observa todas as imagens com classe lazy
     document.querySelectorAll('img.lazy').forEach(img => {
-      imageObserver.observe(img);
+      if (img.dataset && img.dataset.src) {
+        imageObserver.observe(img);
+      }
     });
   } else {
     // Fallback para navegadores que não suportam IntersectionObserver
     document.querySelectorAll('img.lazy').forEach(img => {
-      img.src = img.dataset.src;
-      img.classList.remove('lazy');
+      if (img.dataset && img.dataset.src) {
+        img.src = img.dataset.src;
+        img.classList.remove('lazy');
+      }
     });
   }
 }
@@ -132,6 +138,9 @@ function renderArticlesPage(page) {
   pageArticles.forEach((article, index) => {
     const articleId = `article-${startIndex + index}`;
     
+    // Verificar se a imagem existe e garantir que não seja undefined
+    const imagePath = (article && article.image) ? article.image : '/advogados-mendes/img/placeholder.jpg';
+    
     // Create article card
     const articleCard = document.createElement("div");
     articleCard.className = "article-card";
@@ -139,13 +148,13 @@ function renderArticlesPage(page) {
     
     articleCard.innerHTML = `
       <div class="article-image">
-        <img class="lazy" data-src="${article.image}" alt="${article.title}" loading="lazy" onerror="this.onerror=null; this.src='img/placeholder.jpg';">
+        <img class="lazy" data-src="${imagePath}" alt="${article.title || 'Artigo'}" loading="lazy" onerror="this.onerror=null; this.src='/advogados-mendes/img/placeholder.jpg';">
       </div>
       <div class="article-content">
-        <h3>${article.title}</h3>
-        <p class="article-date">${article.date}</p>
+        <h3>${article.title || 'Sem título'}</h3>
+        <p class="article-date">${article.date || ''}</p>
         <div class="article-description">
-          <p>${article.description}</p>
+          <p>${article.description || ''}</p>
         </div>
       </div>
     `;
@@ -163,13 +172,13 @@ function renderArticlesPage(page) {
           <span class="article-modal-close">&times;</span>
           <div class="modal-content-wrapper">
             <div class="article-modal-image">
-              <img class="lazy" data-src="${article.image}" alt="${article.title}" loading="lazy" onerror="this.onerror=null; this.src='img/placeholder.jpg';">
+              <img class="lazy" data-src="${imagePath}" alt="${article.title || 'Artigo'}" loading="lazy" onerror="this.onerror=null; this.src='/advogados-mendes/img/placeholder.jpg';">
             </div>
             <div class="article-modal-text">
-              <h2>${article.title}</h2>
-              <p class="article-date">${article.date}</p>
+              <h2>${article.title || 'Sem título'}</h2>
+              <p class="article-date">${article.date || ''}</p>
               <div class="article-modal-body">
-                ${article.content}
+                ${article.content || ''}
               </div>
             </div>
           </div>
@@ -341,8 +350,10 @@ function extractDate(markdown) {
 }
 
 function extractImageUrl(markdown) {
+  if (!markdown) return '/advogados-mendes/img/placeholder.jpg';
   const match = markdown.match(/^!\[.*?\]\((.*?)\)/m);
-  return match ? match[1].trim() : "img/blog-placeholder.jpg";
+  const url = match ? match[1].trim() : '/advogados-mendes/img/placeholder.jpg';
+  return url || '/advogados-mendes/img/placeholder.jpg';
 }
 
 function extractDescription(markdown, title, date, imageUrl) {
