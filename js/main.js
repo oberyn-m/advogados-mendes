@@ -5,9 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   initializeScrollButton();
-
-  
   initializeFAQ();
+  initializeFloatingIcons();
 });
 
 function initializeScrollButton() {
@@ -68,6 +67,30 @@ function initializeFAQ() {
           answer.style.maxHeight = "0";
         }
       }
+    });
+  });
+}
+
+function initializeFloatingIcons() {
+  const scrollTopButton = document.querySelector('.scroll-top-icon');
+  const whatsappButton = document.querySelector('.whatsapp-icon');
+  
+  // Mostra/esconde o botão de voltar ao topo
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      scrollTopButton.style.opacity = '1';
+      scrollTopButton.style.visibility = 'visible';
+    } else {
+      scrollTopButton.style.opacity = '0';
+      scrollTopButton.style.visibility = 'hidden';
+    }
+  });
+
+  // Ação de voltar ao topo
+  scrollTopButton.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
     });
   });
 }

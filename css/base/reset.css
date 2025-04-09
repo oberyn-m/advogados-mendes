@@ -4,6 +4,24 @@
   box-sizing: border-box;
 }
 
+/* Estilização da scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 60px;

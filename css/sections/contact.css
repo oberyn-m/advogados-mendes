@@ -44,6 +44,7 @@
   flex-direction: column;
   gap: 5px;
   margin-bottom: 1.5rem;
+  position: relative;
 }
 
 .form-group:last-child {
@@ -167,4 +168,54 @@
     padding: 40px 0;
     min-height: auto;
   }
+}
+
+/* Estilos para campos com erro */
+.form-group input.error,
+.form-group textarea.error {
+    border-color: #dc3545;
+    background-color: #fff8f8;
+}
+
+.form-group input.error:focus,
+.form-group textarea.error:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Placeholder para o campo de telefone */
+#telefone::placeholder {
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+/* Contador de caracteres */
+.char-count {
+    float: right;
+    font-size: 0.8em;
+    color: #6c757d;
+    font-weight: normal;
+}
+
+.char-count.limit-near {
+    color: #ffc107;
+}
+
+.char-count.limit-reached {
+    color: #dc3545;
+}
+
+/* Mensagens de erro do formulário */
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: none;
+    position: absolute;
+    bottom: -20px;
+}
+
+.form-group input.error + .error-message,
+.form-group textarea.error + .error-message {
+    display: block;
 }

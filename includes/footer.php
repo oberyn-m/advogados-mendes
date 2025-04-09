@@ -6,16 +6,16 @@
       </div>
       <div class="footer-contact">
         <h3>Contato</h3>
-        <p><i class="fas fa-map-marker-alt"></i> Av. Paulista, 1000, São Paulo - SP</p>
-        <p><i class="fas fa-phone"></i> (11) 3000-0000</p>
-        <p><i class="fas fa-envelope"></i> contato@mendesadvocacia.com.br</p>
+        <p><i class="fas fa-map-marker-alt"></i><?php echo $siteAddress; ?></p>
+        <p><i class="fas fa-phone"></i><?php echo $sitePhone; ?></p>
+        <p><i class="fas fa-envelope"></i><?php echo $siteEmail; ?></p>
       </div>
       <div class="footer-social">
         <h3>Redes Sociais</h3>
         <div class="social-icons">
-          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="<?php echo $linkFacebook; ?>" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="<?php echo $linkInstagram; ?>" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="<?php echo $linkLinkedin; ?>" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
         </div>
       </div>
     </div>
@@ -30,6 +30,17 @@
 <script src="js/articles-data.js"></script>
 <script src="js/articles.js"></script>
 <script src="js/main.js"></script>
+
+<div class="floating-icons">
+  <div class="floating-icons-container">
+    <a href="https://wa.me/<?php echo $numberWhatsapp; ?>?text=<?php echo urlencode($messageWhatsapp); ?>" target="_blank" class="floating-icon whatsapp-icon" aria-label="Contato via WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <button class="floating-icon scroll-top-icon" aria-label="Voltar ao topo">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+  </div>
+</div>
 
 </body>
 </html>

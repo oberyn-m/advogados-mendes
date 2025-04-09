@@ -1,0 +1,103 @@
+.floating-icons {
+  position: fixed;
+  bottom: 30px;
+  width: 100%;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.floating-icons-container {
+  position: relative;
+  width: 100%;
+  pointer-events: none;
+}
+
+.floating-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+  background-color: var(--background-light);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: none;
+  opacity: 0;
+  visibility: hidden;
+  text-decoration: none;
+  line-height: 1;
+  position: fixed;
+  bottom: 30px;
+}
+
+.floating-icon.whatsapp-icon {
+  opacity: 1;
+  visibility: visible;
+  background-color: #46c556;
+  left: 20px;
+}
+
+.floating-icon.scroll-top-icon {
+  right: 20px;
+}
+
+.floating-icon.whatsapp-icon i {
+  color: #ffffff;
+}
+
+.floating-icon.whatsapp-icon:hover {
+  background-color: #3ab149;
+}
+
+.floating-icon:hover {
+  background-color: var(--accent-color);
+  transform: translateY(-3px);
+}
+
+.floating-icon svg,
+.floating-icon i {
+  width: 24px;
+  height: 24px;
+  color: var(--text-color);
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.floating-icon:hover svg,
+.floating-icon:hover i {
+  color: var(--background-light);
+}
+
+@media (max-width: 768px) {
+  .floating-icons {
+    bottom: 20px;
+  }
+
+  .floating-icon {
+    width: 45px;
+    height: 45px;
+    bottom: 20px;
+  }
+
+  .floating-icon.whatsapp-icon {
+    left: 15px;
+  }
+
+  .floating-icon.scroll-top-icon {
+    right: 15px;
+  }
+
+  .floating-icon svg,
+  .floating-icon i {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+} 

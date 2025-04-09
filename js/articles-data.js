@@ -1,8 +1,3 @@
-/**
- * Dados dos artigos em formato JavaScript
- * Esta abordagem elimina os problemas de carregamento do arquivo markdown
- */
-
 const articlesData = [
   {
     title: "Teste Título 1",

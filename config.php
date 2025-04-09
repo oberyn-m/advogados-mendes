@@ -12,9 +12,18 @@ $dotenv->load();
 // Configurações do site
 $siteName = 'Mendes Advocacia';
 $siteDescription = 'Excelência em Direito Trabalhista';
-$siteEmail = $_ENV['SMTP_USERNAME'] ?? 'contato@mendesadvocacia.com.br';
+$siteEmail = 'contato@mendesadvocacia.com.br';
 $sitePhone = '(11) 1234-5678';
 $siteAddress = 'Av. Paulista, 1000 - São Paulo, SP';
+
+// Configurações WhatsApp
+$numberWhatsapp = "5573982581380"; // Número do WhatsApp (apenas números)
+$messageWhatsapp = "Olá! Gostaria de agendar uma consulta."; // Mensagem padrão
+
+// Links Redes Sociais
+$linkFacebook = "https://facebook.com/mendesadvocacia";
+$linkInstagram = "https://instagram.com/mendesadvocacia";
+$linkLinkedin = "https://linkedin.com/company/mendesadvocacia";
 
 // Configurações de timezone
 date_default_timezone_set('America/Sao_Paulo');
