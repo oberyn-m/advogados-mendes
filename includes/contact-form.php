@@ -1,5 +1,5 @@
 <?php 
-require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/config.php';
 
 // Verifica se há mensagens para exibir
 $message = null;
@@ -70,6 +70,9 @@ if (isset($_SESSION['message'])) {
         </div>
         <div class="map-container">
           <h3>Localização</h3>
+          <div class="map-notice" style="display: none;">
+            <p>Para visualizar o mapa, por favor, desative temporariamente seu bloqueador de anúncios.</p>
+          </div>
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.098839582944!2d-46.652496384406414!3d-23.564611167596294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0x63b9f0e6074baa47!2sAv.%20Paulista%2C%201000%20-%20Bela%20Vista%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2001310-100!5e0!3m2!1spt-BR!2sbr!4v1650000000000!5m2!1spt-BR!2sbr"
             width="100%"
@@ -86,3 +89,12 @@ if (isset($_SESSION['message'])) {
     </div>
   </div>
 </section>
+
+<script>
+  // Verifica se o mapa foi bloqueado
+  window.addEventListener('error', function(e) {
+    if (e.target.tagName === 'IFRAME' && e.target.src.includes('google.com/maps')) {
+      document.querySelector('.map-notice').style.display = 'block';
+    }
+  }, true);
+</script>

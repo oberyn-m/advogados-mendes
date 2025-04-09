@@ -1,6 +1,6 @@
 <?php
-require_once 'config.php';
-require 'vendor/autoload.php';
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Carrega as variáveis de ambiente
-        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
         $dotenv->load();
         
         // Configura o PHPMailer
@@ -116,4 +116,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 } else {
     sendJsonResponse(false, 'Método de requisição inválido');
-}
+} 
