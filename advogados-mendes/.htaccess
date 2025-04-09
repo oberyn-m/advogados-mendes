@@ -1,0 +1,13 @@
+# Configurações específicas para ambiente local
+RewriteEngine On
+
+# Força HTTP em ambiente local
+RewriteCond %{HTTPS} on
+RewriteCond %{HTTP_HOST} ^localhost(:81)?$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^127\.0\.0\.1(:81)?$ [NC]
+RewriteRule ^(.*)$ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Desativa HSTS para localhost
+<IfModule mod_headers.c>
+    Header unset Strict-Transport-Security
+</IfModule> 

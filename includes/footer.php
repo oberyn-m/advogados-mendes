@@ -25,11 +25,14 @@
   </div>
 </footer>
 
-<script src="js/modules/navigation.js"></script>
-<script src="js/modules/forms.js"></script>
-<script src="js/articles-data.js"></script>
-<script src="js/articles.js"></script>
-<script src="js/main.js"></script>
+<!-- Scripts essenciais para a navegação -->
+<script src="js/modules/navigation.js" defer></script>
+
+<!-- Scripts para formulários e funcionalidades secundárias -->
+<script src="js/modules/forms.js" defer></script>
+<script src="js/articles-data.js" defer></script>
+<script src="js/articles.js" defer></script>
+<script src="js/main.js" defer></script>
 
 <div class="floating-icons">
   <div class="floating-icons-container">

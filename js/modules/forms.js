@@ -39,7 +39,20 @@ const Forms = {
   setupPhoneMask: function() {
     const telefoneInput = document.getElementById('telefone');
     if (telefoneInput) {
-      telefoneInput.addEventListener('input', function(e) {
+      // Usa uma função de debounce para limitar a frequência de processamento
+      const debounce = (func, wait) => {
+        let timeout;
+        return function() {
+          const context = this;
+          const args = arguments;
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            func.apply(context, args);
+          }, wait);
+        };
+      };
+      
+      const formatPhone = debounce(function(e) {
         let value = e.target.value.replace(/\D/g, '');
         
         if (value.length > 11) value = value.slice(0, 11);
@@ -60,7 +73,9 @@ const Forms = {
         }
         
         e.target.value = value;
-      });
+      }, 100);
+      
+      telefoneInput.addEventListener('input', formatPhone);
     }
   },
 
@@ -110,7 +125,17 @@ const Forms = {
 
     const emailInput = form.querySelector('#email');
     const phoneInput = form.querySelector('#telefone');
+    const nameInput = form.querySelector('#nome');
+    const subjectInput = form.querySelector('#assunto');
+    const messageInput = form.querySelector('#mensagem');
 
+    // Validação de nome
+    if (nameInput && nameInput.value.trim() === '') {
+      isValid = false;
+      this.showError('nome', 'Por favor, insira seu nome.');
+    }
+
+    // Validação de email
     if (emailInput) {
       const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
       if (!emailRegex.test(emailInput.value)) {
@@ -119,6 +144,7 @@ const Forms = {
       }
     }
 
+    // Validação de telefone
     if (phoneInput) {
       const phoneValue = phoneInput.value.replace(/\D/g, '');
       const ddd = phoneValue.slice(0, 2);
@@ -129,6 +155,18 @@ const Forms = {
       }
     }
 
+    // Validação de assunto
+    if (subjectInput && subjectInput.value.trim() === '') {
+      isValid = false;
+      this.showError('assunto', 'Por favor, insira um assunto.');
+    }
+
+    // Validação de mensagem
+    if (messageInput && messageInput.value.trim() === '') {
+      isValid = false;
+      this.showError('mensagem', 'Por favor, insira sua mensagem.');
+    }
+
     return isValid;
   },
 
@@ -137,16 +175,23 @@ const Forms = {
     form.reset();
     
     // Limpa manualmente cada campo para garantir
-    document.getElementById('nome').value = '';
-    document.getElementById('email').value = '';
-    document.getElementById('telefone').value = '';
-    document.getElementById('assunto').value = '';
-    document.getElementById('mensagem').value = '';
+    const fields = ['nome', 'email', 'telefone', 'assunto', 'mensagem'];
+    fields.forEach(field => {
+      const element = document.getElementById(field);
+      if (element) element.value = '';
+    });
     
     // Atualiza os contadores
-    document.getElementById('nomeCount').textContent = '0/200';
-    document.getElementById('assuntoCount').textContent = '0/200';
-    document.getElementById('mensagemCount').textContent = '0/1000';
+    const counters = {
+      'nomeCount': '0/200',
+      'assuntoCount': '0/200',
+      'mensagemCount': '0/1000'
+    };
+    
+    Object.keys(counters).forEach(counterId => {
+      const counter = document.getElementById(counterId);
+      if (counter) counter.textContent = counters[counterId];
+    });
     
     // Remove classes de erro
     this.clearErrors();
@@ -196,11 +241,25 @@ const Forms = {
         
         const formData = new FormData(this);
         
+        // Adiciona token CSRF se disponível
+        const csrfToken = document.querySelector('meta[name="csrf-token"]');
+        if (csrfToken) {
+          formData.append('csrf_token', csrfToken.getAttribute('content'));
+        }
+        
         fetch('process_contact.php', {
           method: 'POST',
-          body: formData
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         })
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erro na resposta do servidor');
+          }
+          return response.json();
+        })
         .then(data => {
           if (data.success === true) {
             // Limpa o formulário
@@ -210,7 +269,7 @@ const Forms = {
             self.showSuccessMessage(data.message);
           } else {
             // Mostra mensagem de erro
-            alert(data.message);
+            alert(data.message || 'Ocorreu um erro ao enviar a mensagem.');
           }
         })
         .catch(error => {

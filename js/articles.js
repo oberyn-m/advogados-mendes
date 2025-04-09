@@ -7,12 +7,45 @@
 let currentPage = 1;
 const articlesPerPage = 3;
 let sortedArticles = [];
+let isLoading = false;
 
 // Carrega os artigos quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', function() {
   // Carregar artigos
   displayArticles();
+  
+  // Adiciona observer para carregar imagens apenas quando visíveis
+  setupLazyLoading();
 });
+
+/**
+ * Configura o lazy loading para imagens de artigos
+ */
+function setupLazyLoading() {
+  if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.classList.remove('lazy');
+          observer.unobserve(img);
+        }
+      });
+    });
+    
+    // Observa todas as imagens com classe lazy
+    document.querySelectorAll('img.lazy').forEach(img => {
+      imageObserver.observe(img);
+    });
+  } else {
+    // Fallback para navegadores que não suportam IntersectionObserver
+    document.querySelectorAll('img.lazy').forEach(img => {
+      img.src = img.dataset.src;
+      img.classList.remove('lazy');
+    });
+  }
+}
 
 /**
  * Exibe os artigos na página
@@ -62,10 +95,14 @@ function convertToDate(dateString) {
  * Renderiza os artigos da página especificada
  */
 function renderArticlesPage(page) {
+  if (isLoading) return;
+  isLoading = true;
+  
   const articlesContainer = document.getElementById("articlesContainer");
   const modalsContainer = document.getElementById("articleModalsContainer");
   
   if (!articlesContainer) {
+    isLoading = false;
     return;
   }
   
@@ -87,6 +124,7 @@ function renderArticlesPage(page) {
         <p>Não há artigos disponíveis para exibir.</p>
       </div>
     `;
+    isLoading = false;
     return;
   }
   
@@ -101,7 +139,7 @@ function renderArticlesPage(page) {
     
     articleCard.innerHTML = `
       <div class="article-image">
-        <img src="${article.image}" alt="${article.title}" onerror="this.onerror=null; this.src='img/placeholder.jpg';">
+        <img class="lazy" data-src="${article.image}" alt="${article.title}" loading="lazy" onerror="this.onerror=null; this.src='img/placeholder.jpg';">
       </div>
       <div class="article-content">
         <h3>${article.title}</h3>
@@ -125,7 +163,7 @@ function renderArticlesPage(page) {
           <span class="article-modal-close">&times;</span>
           <div class="modal-content-wrapper">
             <div class="article-modal-image">
-              <img src="${article.image}" alt="${article.title}" onerror="this.onerror=null; this.src='img/placeholder.jpg';">
+              <img class="lazy" data-src="${article.image}" alt="${article.title}" loading="lazy" onerror="this.onerror=null; this.src='img/placeholder.jpg';">
             </div>
             <div class="article-modal-text">
               <h2>${article.title}</h2>
@@ -147,6 +185,11 @@ function renderArticlesPage(page) {
   
   // Adiciona event listeners aos modais criados
   initializeArticleModals();
+  
+  // Configura lazy loading para as novas imagens
+  setupLazyLoading();
+  
+  isLoading = false;
 }
 
 /**
@@ -175,6 +218,7 @@ function addPaginationControls(container, currentPage, totalPages) {
   
   if (currentPage > 1) {
     prevButton.addEventListener('click', () => {
+      if (isLoading) return;
       currentPage--;
       renderArticlesPage(currentPage);
       // Scroll suave para o topo da seção de artigos
@@ -193,6 +237,7 @@ function addPaginationControls(container, currentPage, totalPages) {
   
   if (currentPage < totalPages) {
     nextButton.addEventListener('click', () => {
+      if (isLoading) return;
       currentPage++;
       renderArticlesPage(currentPage);
       // Scroll suave para o topo da seção de artigos
@@ -248,12 +293,11 @@ function initializeArticleModals() {
   const closeButtons = document.querySelectorAll('.article-modal-close');
   closeButtons.forEach(button => {
     button.addEventListener('click', function() {
-      // Encontra o modal pai e fecha
       const modal = this.closest('.article-modal');
       if (modal) {
         modal.style.display = 'none';
         // Restaura o scroll da página
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = '';
       }
     });
   });
@@ -261,22 +305,23 @@ function initializeArticleModals() {
   // Fecha o modal ao clicar fora do conteúdo
   const modals = document.querySelectorAll('.article-modal');
   modals.forEach(modal => {
-    modal.addEventListener('click', function(event) {
-      // Verifica se o clique foi no fundo do modal
-      if (event.target === this) {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+    modal.addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.style.display = 'none';
+        // Restaura o scroll da página
+        document.body.style.overflow = '';
       }
     });
   });
   
-  // Adiciona evento para fechar com a tecla ESC
+  // Fecha o modal ao pressionar ESC
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-      const openModal = document.querySelector('.article-modal[style="display: block;"]');
+      const openModal = document.querySelector('.article-modal[style*="display: block"]');
       if (openModal) {
         openModal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+        // Restaura o scroll da página
+        document.body.style.overflow = '';
       }
     }
   });

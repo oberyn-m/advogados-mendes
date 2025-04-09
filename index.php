@@ -2,6 +2,32 @@
 require_once __DIR__ . '/includes/config.php';
 session_start();
 
+// Verificação de ambiente local mais precisa
+$isLocalhost = (
+    preg_match('/^localhost(:81)?$/', $_SERVER['HTTP_HOST']) || 
+    preg_match('/^127\.0\.0\.1(:81)?$/', $_SERVER['HTTP_HOST'])
+);
+
+// Forçar HTTPS apenas em produção
+if (!$isLocalhost && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on')) {
+    $redirectUrl = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header("Location: " . $redirectUrl);
+    exit();
+}
+
+// Headers de segurança (exceto HSTS em localhost)
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: SAMEORIGIN");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+
+// Desativa HSTS em ambiente local
+if ($isLocalhost) {
+    header("Strict-Transport-Security: max-age=0");
+} else {
+    header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
+}
+
 require 'includes/header.php';
 ?>
 
@@ -27,7 +53,7 @@ require 'includes/header.php';
         <p>Acreditamos que o acesso à justiça é um direito fundamental, e trabalhamos diariamente para torná-lo uma realidade para nossos clientes.</p>
       </div>
       <div class="about-image">
-        <img src="img/lawyer.jpg" alt="Equipe jurídica">
+        <img src="img/lawyer.jpg" alt="Equipe jurídica" loading="lazy" width="600" height="400">
       </div>
     </div>
   </div>
