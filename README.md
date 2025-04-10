@@ -93,6 +93,17 @@ O site é totalmente responsivo e se adapta aos seguintes breakpoints:
 - Proteção contra CSRF
 - Configurações seguras de envio de e-mail
 
+## 🔄 Melhorias Futuras
+
+Para uma visão completa das melhorias planejadas e possíveis atualizações futuras do projeto, consulte o arquivo [MELHORIAS.md](MELHORIAS.md). Este documento contém uma lista detalhada de todas as melhorias propostas, organizadas por categorias como:
+
+- Performance e Otimização
+- SEO e Acessibilidade
+- Segurança
+- UX/UI
+- Funcionalidades
+- E muito mais...
+
 ## 📄 Licença
 
 Este projeto está sob a licença MIT.
