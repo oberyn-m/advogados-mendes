@@ -137,4 +137,120 @@ body.menu-open {
   .logo-mobile {
     font-size: 20px;
   }
+
+  .about-section,
+  .about {
+    padding: 40px 20px !important;
+  }
+
+  .about-content {
+    flex-direction: column !important;
+    gap: 30px !important;
+    align-items: center !important;
+  }
+
+  .about-image {
+    flex: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  .about-image img {
+    width: 100% !important;
+    height: 400px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+  }
+
+  .about-text {
+    flex: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: justify !important;
+    padding: 0 15px;
+  }
+
+  .about-text h2 {
+    text-align: center !important;
+    margin-bottom: 20px !important;
+  }
+
+  .about-text p {
+    text-align: justify !important;
+    margin-bottom: 15px !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+  }
+}
+
+/* Responsividade da seção Sobre */
+@media screen and (max-width: 991px) {
+  .about .about-content {
+    display: block;
+    padding: 0 20px;
+  }
+
+  .about .about-image {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .about .about-image img {
+    display: block;
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+  }
+
+  .about .about-text {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .about .about-text p {
+    text-align: justify;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .about .about-image img {
+    height: 350px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .logo {
+    font-size: 18px;
+  }
+
+  .menu-link {
+    font-size: 16px;
+  }
+
+  .logo-mobile {
+    font-size: 20px;
+  }
+
+  .about .about-content {
+    padding: 0 15px;
+  }
+
+  .about .about-image img {
+    height: 300px;
+  }
+
+  .about .section-header h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .about .about-text p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
 }
