@@ -6,6 +6,8 @@
 
 Website profissional desenvolvido para o escritório Mendes Advocacia, especializado em Direito Trabalhista. O site foi construído com foco em performance, acessibilidade e experiência do usuário, utilizando tecnologias modernas e boas práticas de desenvolvimento.
 
+**Acesse o site:** [http://adadvogados-mendes.rf.gd/](http://adadvogados-mendes.rf.gd/)
+
 ### 🌟 Características Principais
 
 - Design moderno e responsivo
@@ -92,28 +94,6 @@ O site é totalmente responsivo e se adapta aos seguintes breakpoints:
 - Sanitização de dados
 - Proteção contra CSRF
 - Configurações seguras de envio de e-mail
-
-## 🔄 Melhorias Futuras
-
-Para uma visão completa das melhorias planejadas e possíveis atualizações futuras do projeto, consulte o arquivo [MELHORIAS.md](MELHORIAS.md). Este documento contém uma lista detalhada de todas as melhorias propostas, organizadas por categorias como:
-
-- Performance e Otimização
-- SEO e Acessibilidade
-- Segurança
-- UX/UI
-- Funcionalidades
-- E muito mais...
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT.
-
-## 📞 Contato
-
-Mendes Advocacia
-- Website: [www.mendesadvocacia.com.br](http://www.mendesadvocacia.com.br)
-- Email: contato@mendesadvocacia.com.br
-- Telefone: (11) 1234-5678
 
 ---
 Desenvolvido com ❤️ por [Isaac Matos](https://github.com/oberyn-m)

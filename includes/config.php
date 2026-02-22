@@ -19,7 +19,9 @@ $dotenv->load();
 
 // Configurações de administrador
 define('ADMIN_USERNAME', 'admin');
-define('ADMIN_PASSWORD', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'); // senha: 'password'
+// IMPORTANTE: Gere um novo hash bcrypt SEGURO para a senha em produção!
+// Use o arquivo admin/setup-password.php ou admin/update-password.php para gerar o hash
+define('ADMIN_PASSWORD', '$2y$10$dKXH/r4DHFKQG.8q9cQmjeRZ46gzxFLkdARt7C2KuaLjGwB.w9dGi');
 
 // Configurações de upload
 define('UPLOAD_DIR', __DIR__ . '/../uploads/');

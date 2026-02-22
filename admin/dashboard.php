@@ -310,7 +310,7 @@ $articles = readArticles();
                     <h5 class="modal-title">Artigo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form method="POST" enctype="multipart/form-data">
+                <form method="POST" action="dashboard.php" enctype="multipart/form-data">
                     <div class="modal-body">
                         <input type="hidden" name="action" value="add" id="formAction">
                         <input type="hidden" name="article_id" id="articleId">
