@@ -21,7 +21,7 @@ $dotenv->load();
 define('ADMIN_USERNAME', 'admin');
 // IMPORTANTE: Gere um novo hash bcrypt SEGURO para a senha em produção!
 // Use o arquivo admin/setup-password.php ou admin/update-password.php para gerar o hash
-define('ADMIN_PASSWORD', '$2y$10$dKXH/r4DHFKQG.8q9cQmjeRZ46gzxFLkdARt7C2KuaLjGwB.w9dGi');
+define('ADMIN_PASSWORD', '$2y$10$ZSAHtS//esqfqHm.ctpXoeO0idqfZnA7Ob8gQjmEeG.IHPEtZUpkC');
 
 // Configurações de upload
 define('UPLOAD_DIR', __DIR__ . '/../uploads/');
@@ -64,20 +64,20 @@ function handleImageUpload($file) {
 // Configurações do site
 $siteName = 'Mendes Advocacia';
 $siteDescription = 'Excelência em Direito Trabalhista';
-$siteEmail = 'contato@mendesadvocacia.com.br';
+$siteEmail = 'contato@sememail.com.br';
 $sitePhone = '(11) 1234-5678';
 $siteAddress = 'Av. Paulista, 1000 - São Paulo, SP';
 $workingHours = 'Segunda a Sexta: 9h às 18h';
 $currentYear = date('Y');
 
 // Configurações WhatsApp
-$numberWhatsapp = "5573982581380"; // Número do WhatsApp (apenas números)
+$numberWhatsapp = "5573981111111"; // Número do WhatsApp (apenas números)
 $messageWhatsapp = "Olá! Gostaria de agendar uma consulta."; // Mensagem padrão
 
 // Links Redes Sociais
-$linkFacebook = "https://facebook.com/mendesadvocacia";
-$linkInstagram = "https://instagram.com/mendesadvocacia";
-$linkLinkedin = "https://linkedin.com/company/mendesadvocacia";
+$linkFacebook = "https://www.facebook.com/";
+$linkInstagram = "https://www.instagram.com/";
+$linkLinkedin = "https://www.linkedin.com/feed/";
 
 // Configurações de timezone
 date_default_timezone_set('America/Sao_Paulo');
